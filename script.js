@@ -30,13 +30,10 @@ function checkForEnter(event) {
 function displayPlanetInfo({name, climate, population, terrain, residents}, planetListItem) {
   const existingPlanetInfoList = planetListItem.querySelector('ul');
   if (existingPlanetInfoList) {
-    planetListItem.removeChild(existingPlanetInfoList)
-  };
-  const existingResidentInfoTable = planetListItem.querySelector('table');
-  if (existingResidentInfoTable) {
-    planetListItem.removeChild(existingResidentInfoTable);
+    planetListItem.removeChild(existingPlanetInfoList);
     return;
-  }
+  };
+
   const planetInfoList = document.createElement('ul');
   planetInfoList.innerHTML = 
   `
@@ -65,6 +62,11 @@ async function fetchResident(url) {
 
 function displayResidents(residentUrls, planetListItem, planetInfoList) {
   const description = document.createElement('li');
+  const existingResidentInfoTable = description.querySelector('table');
+  if (existingResidentInfoTable) {
+    description.removeChild(existingResidentInfoTable);
+    return;
+  }
   description.innerHTML = 'Famous Residents';
   planetInfoList.appendChild(description);
   const table = document.createElement('table');
