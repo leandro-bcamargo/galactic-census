@@ -7,10 +7,10 @@
 </head>
 <body>
   <h1>Galactic Census</h1>
-  <button onclick="displayPlanets()">Fetch Planets</button>
+  <input type="text" name="planet-search" id="planet-search" placeholder="Search planet" onkeydown="checkForEnter(event)">
+  <button onclick="searchPlanets()">Search</button>
   <div class="planet-div">
     <ul class="planet-list">
-      
     </ul>
   </div>
   <script src="script.js"></script>
