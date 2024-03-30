@@ -27,12 +27,16 @@ function checkForEnter(event) {
   if (event.key === 'Enter') searchPlanets();
 }
 
-function displayPlanetInfo({name, climate, population, terrain}, planetListItem) {
+function displayPlanetInfo({name, climate, population, terrain, residents}, planetListItem) {
   const existingPlanetInfoList = planetListItem.querySelector('ul');
   if (existingPlanetInfoList) {
     planetListItem.removeChild(existingPlanetInfoList)
-    return;
   };
+  const existingResidentInfoTable = planetListItem.querySelector('table');
+  if (existingResidentInfoTable) {
+    planetListItem.removeChild(existingResidentInfoTable);
+    return;
+  }
   const planetInfoList = document.createElement('ul');
   planetInfoList.innerHTML = 
   `
@@ -43,6 +47,7 @@ function displayPlanetInfo({name, climate, population, terrain}, planetListItem)
     </ul>
   `
   planetListItem.append(planetInfoList);
+  displayResidents(residents, planetListItem, planetInfoList);
 }
 
 async function searchPlanets() {
@@ -50,6 +55,36 @@ async function searchPlanets() {
   const planets = await fetchPlanets();
   const searchedPlanets = planets.filter(planet => planet.name.toLowerCase().includes(searchedName));
   displayPlanets(searchedPlanets);
+}
+
+async function fetchResident(url) {
+  const data = await fetch(url);
+  const resident = await data.json();
+  return resident;
+}
+
+function displayResidents(residentUrls, planetListItem, planetInfoList) {
+  const description = document.createElement('li');
+  description.innerHTML = 'Famous Residents';
+  planetInfoList.appendChild(description);
+  const table = document.createElement('table');
+  table.innerHTML = `
+    <tr>
+      <th>Name</th>
+      <th>Birth Year</th>
+    </tr>
+  `;
+  
+  residentUrls.forEach(async residentUrl => {
+    const resident = await fetchResident(residentUrl)
+    const tableRow = document.createElement('tr');
+    tableRow.innerHTML = `
+      <th>${resident.name}</th>
+      <th>${resident.birth_year}</th>
+    `
+    table.appendChild(tableRow);
+  })
+  description.append(table);
 }
 
 
